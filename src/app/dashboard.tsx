@@ -331,7 +331,7 @@ const Dashboard: React.FC = () => {
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => {
                   const weiValue = BigInt(e.target.value);
-                  const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                  const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
                   setCollatAmount(etherValue.toString()); // Store the value in ether
                 }}
               ></input>
@@ -348,7 +348,7 @@ const Dashboard: React.FC = () => {
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => {
                   const weiValue = BigInt(e.target.value);
-                  const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                  const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
                   setCreditAmount(etherValue.toString()); // Store the value in ether
                 }}
               ></input>
@@ -378,7 +378,7 @@ const Dashboard: React.FC = () => {
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => {
                   const weiValue = BigInt(e.target.value);
-                  const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                  const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
                   setWithdrawAmount(etherValue.toString()); // Store the value in ether
                 }}
               ></input>
@@ -483,7 +483,7 @@ const Dashboard: React.FC = () => {
                     className="input input-bordered w-full max-w-xs"
                     onChange={(e) => {
                       const weiValue = BigInt(e.target.value);
-                      const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                      const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
                       setBorrowAmount(etherValue.toString()); // Store the value in ether
                     }}
                   ></input>
@@ -499,7 +499,7 @@ const Dashboard: React.FC = () => {
                     className="input input-bordered w-full max-w-xs"
                     onChange={(e) => {
                       const weiValue = BigInt(e.target.value);
-                      const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                      const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
                       setPaybackAmount(etherValue.toString()); // Store the value in ether
                     }}
                   ></input>
