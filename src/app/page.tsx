@@ -2,7 +2,7 @@
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { signMessage } from "@wagmi/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { config } from "../wagmi";
 import Dashboard from "./dashboard";
 
@@ -14,9 +14,12 @@ function App() {
   const { connectors, connect, status, error } = useConnect();
   const { disconnect } = useDisconnect();
   const [signing, setSigning] = useState(false);
-  const [signature, setSignature] = useState("");
+  const [signature, setSignature] = useState(null);
   const [signError, setSignError] = useState("");
   const [docuPassLink, setDocuPassLink] = useState<string | null>(null);
+  const [userStatus, setUserStatus] = useState({ verified: false, reason: "" });
+  const [isVerified, setIsVerified] = useState<boolean | null>(null);
+  const [verificationReason, setVerificationReason] = useState<string>("");
 
   const setMessage = "hello";
 
@@ -36,6 +39,37 @@ function App() {
   const saveDocuPassLinkToLocalStorage = (address: string, link: string) => {
     const dataToSave = JSON.stringify({ address, docuPassLink: link });
     localStorage.setItem("docuPassData", dataToSave);
+  };
+
+  useEffect(() => {
+    if (account.status === "connected" && !signature) {
+      handleVerificationCheck();
+    }
+  }, [account.status, signature]);
+
+  const handleVerificationCheck = async () => {
+    try {
+      const response = await axios.post("/api/checkVault", {
+        address: account.address,
+      });
+      const { status, reason } = response.data;
+      console.log(status, reason);
+
+      if (status === "true") {
+        setIsVerified(true);
+        setVerificationReason("");
+      } else if (status === "NA") {
+        setIsVerified(null);
+        setVerificationReason("");
+      } else {
+        setIsVerified(false);
+        setVerificationReason(reason || "Verification failed.");
+      }
+    } catch (error) {
+      console.error("Error occurred during verification check:", error);
+      setIsVerified(false);
+      setVerificationReason("Error occurred during verification check.");
+    }
   };
 
   const handleSignMessage = async () => {
@@ -110,7 +144,7 @@ function App() {
             <button type="button" onClick={() => disconnect()}>
               Disconnect
             </button>
-            {!signature && (
+            {isVerified === null && (
               <button
                 type="button"
                 onClick={handleSignMessage}
@@ -120,12 +154,12 @@ function App() {
               </button>
             )}
 
-            {signature && (
+            {isVerified === null && (
               <>
                 <p>
                   {docuPassLink
                     ? "Click the link to redirect to a website to verify your ID and personhood."
-                    : "Processing your verification..."}
+                    : ""}
                 </p>
                 {docuPassLink && (
                   <a
@@ -137,6 +171,14 @@ function App() {
                   </a>
                 )}
               </>
+            )}
+
+            {isVerified === true && <p>Verified</p>}
+            {isVerified === false && (
+              <p>
+                {verificationReason ||
+                  "Verification failed. Please sign again."}
+              </p>
             )}
           </div>
         )}
