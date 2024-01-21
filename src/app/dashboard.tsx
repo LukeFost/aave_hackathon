@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
   // Call useReadContract at the top level
   const { data: lenderIDData } = useReadContract({
     abi: creditManager,
-    address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+    address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
     functionName: "lenderID",
   });
 
@@ -51,7 +51,7 @@ const Dashboard: React.FC = () => {
     const fetchMaxId = async () => {
       const result = await readContract(config, {
         abi: creditManager,
-        address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+        address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
         functionName: "lenderID",
       });
       setMaxId(Number(result));
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
     async (id: number) => {
       const loanInfo = await readContract(config, {
         abi: creditManager,
-        address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+        address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
         functionName: "idToOffer",
         args: [BigInt(id)],
       });
@@ -95,7 +95,7 @@ const Dashboard: React.FC = () => {
         abi: erc20ABI,
         address: "0xff34b3d4aee8ddcd6f9afffb6fe49bd371b8a357",
         functionName: "approve",
-        args: ["0xd47264b894F0c04edd4D475f2a4B35F6F838d11C", maxVal],
+        args: ["0x5eab93d636ef455eB3C9Db590F6dF486672b3242", maxVal],
       });
       console.log("Transaction hash:", result);
     } catch (error) {
@@ -107,7 +107,7 @@ const Dashboard: React.FC = () => {
     try {
       const result = await writeContract(config, {
         abi: creditManager,
-        address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+        address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
         functionName: "depositCollateral",
         args: ["0xff34b3d4aee8ddcd6f9afffb6fe49bd371b8a357", collatAmount],
       });
@@ -122,7 +122,7 @@ const Dashboard: React.FC = () => {
       console.log(borrowAmount, paybackAmount, datePay);
       const result = await writeContract(config, {
         abi: creditManager,
-        address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+        address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
         functionName: "createLoanOffer",
         args: [borrowAmount, paybackAmount, datePay],
       });
@@ -138,7 +138,7 @@ const Dashboard: React.FC = () => {
         abi: contractDebtToken,
         address: "0x67ae46EF043F7A4508BD1d6B94DB6c33F0915844",
         functionName: "approveDelegation",
-        args: ["0xd47264b894F0c04edd4D475f2a4B35F6F838d11C", creditAmount],
+        args: ["0x5eab93d636ef455eB3C9Db590F6dF486672b3242", creditAmount],
       });
       console.log("Transaction hash:", result);
     } catch (error) {
@@ -150,7 +150,7 @@ const Dashboard: React.FC = () => {
     try {
       const result = await writeContract(config, {
         abi: creditManager,
-        address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+        address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
         functionName: "acceptLoan",
         args: [loanId],
       });
@@ -164,7 +164,7 @@ const Dashboard: React.FC = () => {
     try {
       const result = await writeContract(config, {
         abi: creditManager,
-        address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+        address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
         functionName: "borrowFromLoan",
         args: [loanId],
       });
@@ -178,7 +178,7 @@ const Dashboard: React.FC = () => {
     try {
       const result = await writeContract(config, {
         abi: creditManager,
-        address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+        address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
         functionName: "payOffLoan",
         args: [loanId],
       });
@@ -212,7 +212,7 @@ const Dashboard: React.FC = () => {
         abi: erc20ABI,
         address: "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
         functionName: "approve",
-        args: ["0xd47264b894F0c04edd4D475f2a4B35F6F838d11C", maxVal],
+        args: ["0x5eab93d636ef455eB3C9Db590F6dF486672b3242", maxVal],
       });
       console.log("Transaction hash:", result);
     } catch (error) {
@@ -226,14 +226,20 @@ const Dashboard: React.FC = () => {
     isLoading,
   } = useReadContract({
     abi: creditManager,
-    address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+    address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
     functionName: "getCreditScore",
     args: [account.address],
   });
 
+  const { data: lenderInfo } = useReadContract({
+    abi: creditManager,
+    address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
+    functionName: "addyToInfo",
+    args: [account.address],
+  });
   const { data: borrowInfo } = useReadContract({
     abi: creditManager,
-    address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+    address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
     functionName: "addyToBorrower",
     args: [account.address],
   });
@@ -243,167 +249,306 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-10">
-      <button className="btn btn-primary" onClick={handlePageToggle}>
+    <div className="p-5 w-1/2 mx-auto">
+      <button
+        className="flex btn btn-primary mx-auto"
+        onClick={handlePageToggle}
+      >
         {isPagelenders ? "Lenders" : "Borrowers"}
       </button>
 
-      {isLoading ? (
-        <p>Loading Credit Score...</p>
-      ) : isError ? (
-        <p>Error fetching Credit Score.</p>
-      ) : (
-        <h3>Credit Score: {creditScore?.toString()}</h3>
-      )}
-
-      {isLoading ? (
-        <p>Loading Total Debt...</p>
-      ) : isError ? (
-        <p>Error fetching Total Debt.</p>
-      ) : (
-        <h3>Total Debt: {borrowInfo[0]?.toString()}</h3>
-      )}
-
-      {isLoading ? (
-        <p>Loading Total Amount Paid...</p>
-      ) : isError ? (
-        <p>Error fetching Total Amount Paid.</p>
-      ) : (
-        <h3>Total Amount Paid: {borrowInfo[1]?.toString()}</h3>
-      )}
-
-      {isLoading ? (
-        <p>Loading Number of Loans...</p>
-      ) : isError ? (
-        <p>Error fetching Number of Loans.</p>
-      ) : (
-        <h3>Number of Loans: {borrowInfo[2]?.toString()}</h3>
-      )}
       {!isPagelenders && (
-        <div className="p-10">
-          <br />
-          <button className="btn" onClick={approveDaiFromUser}>
-            approve Dai
-          </button>
-          <br />{" "}
-          <button className="btn" onClick={depositUserCollateral}>
-            deposit Collat
-          </button>
-          <input
-            type="text"
-            placeholder="0"
-            onChange={(e) => setCollatAmount(BigInt(e.target.value))}
-          ></input>
-          {/* NEW AREA */}
-          <hr />
-          <button className="btn" onClick={approveCredit}>
-            Approve Credit Amount
-          </button>
-          <br />
-          <label htmlFor="creditAmount">Credit Amount</label>
-          <input
-            aria-label="Credit Amount"
-            name="creditAmount"
-            type="text"
-            placeholder="0"
-            onChange={(e) => setCreditAmount(BigInt(e.target.value))}
-          ></input>
-          <br />
-          {/* NEW AREA */}
-          <hr />
-          <button className="btn" onClick={acceptLoanOffer}>
-            Accept Loan Offer
-          </button>
-          <br />
-          <label htmlFor="loanID">Loan ID</label>
-          <input
-            aria-label="Loan ID"
-            name="loanID"
-            type="text"
-            placeholder="0"
-            onChange={(e) => setLoanId(BigInt(e.target.value))}
-          ></input>
-          <br />
-        </div>
-      )}
-
-      {isPagelenders && (
-        <div className="p-10">
-          <ul>
-            <li>
-              <button className="btn" onClick={createLoanOffer}>
-                Create Loan Offer
+        <div className="p-5">
+          <div className="flex flex-row w-full">
+            <div className="grid w-fit card bg-base-300 rounded-box place-items-center">
+              <div className="stats stats-vertical shadow h-full">
+                {/* Now Lender Information */}
+                <h3 className="btn btn-neutral">Lender Info</h3>
+                {isLoading ? (
+                  <p>Loading Total Debt...</p>
+                ) : isError ? (
+                  <p>Error fetching Total Debt.</p>
+                ) : (
+                  <div className="stat mx-auto">
+                    <div className="stat-tile">Total Balance</div>
+                    <div className="stat-value">
+                      {lenderInfo[1]?.toString()}
+                    </div>
+                    <div className="stat-desc">
+                      The total balance <br />
+                      the user has
+                      <br /> deposited in.
+                    </div>
+                  </div>
+                )}
+                {isLoading ? (
+                  <p>Loading Total Amount Paid...</p>
+                ) : isError ? (
+                  <p>Error fetching Total Amount Paid.</p>
+                ) : (
+                  <div className="stat mx-auto">
+                    <div className="stat-tile">Total Amount Borrowed</div>
+                    <div className="stat-value">
+                      {lenderInfo[2]?.toString()}
+                    </div>
+                    <div className="stat-desc">
+                      The total amount <br />
+                      the user has
+                      <br /> taken lent out.
+                    </div>
+                  </div>
+                )}
+                {isLoading ? (
+                  <p>Loading Number of Loans...</p>
+                ) : isError ? (
+                  <p>Error fetching Number of Loans.</p>
+                ) : (
+                  <div className="stat mx-auto">
+                    <div className="stat-tile">Number of Loans</div>
+                    <div className="stat-value">
+                      {lenderInfo[3]?.toString()}
+                    </div>
+                    <div className="stat-desc">
+                      The total number <br />
+                      of loans the user has
+                      <br /> taken out against them.
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="divider lg:divider-horizontal"></div>
+            <div className="grid w-fit card bg-base-300 rounded-box place-items-center pb-4 p-2">
+              <button className="btn" onClick={approveDaiFromUser}>
+                Approve Dai
               </button>
-            </li>
-            <li>
-              {/* NEW AREA */}
-              <label htmlFor="amount">Desired Amount</label>
+              <button className="btn" onClick={depositUserCollateral}>
+                Deposit Collateral
+              </button>
               <input
-                aria-label="Desired Amount"
-                name="amount"
                 type="text"
                 placeholder="0"
-                className="input input-bordered w-full max-w-xs"
-                onChange={(e) => setBorrowAmount(BigInt(e.target.value))}
-              ></input>
-            </li>
-            <li>
-              {/* NEW AREA */}
-              <label htmlFor="payback">Payback Amount</label>
-              <input
-                aria-label="Payback Amount"
-                name="payback"
-                type="text"
-                placeholder="0"
-                className="input input-bordered w-full max-w-xs"
-                onChange={(e) => setPaybackAmount(BigInt(e.target.value))}
-              ></input>
-            </li>
-            <li>
-              {/* NEW AREA */}
-              <label htmlFor="complete">Date of Completion</label>
-              <input
-                aria-label="Date of Completion"
-                name="complete"
-                type="date"
-                placeholder="Date"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => {
-                  const selectedDate = new Date(e.target.value);
-                  const unixTimestamp = Math.floor(
-                    selectedDate.getTime() / 1000
-                  );
-                  console.log(unixTimestamp); // Logs the Unix timestamp
-                  setDatePay(unixTimestamp); // Update state with Unix timestamp
+                  const weiValue = BigInt(e.target.value);
+                  const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                  setCollatAmount(etherValue.toString()); // Store the value in ether
                 }}
-              />
-            </li>
-            <li>
+              ></input>
               {/* NEW AREA */}
-              <button className="btn" onClick={approveGHOFromUser}>
-                Approve GHO
+              <button className="btn" onClick={approveCredit}>
+                Approve Credit Amount
               </button>
-            </li>
-            <li>
+              <label htmlFor="creditAmount">Credit Amount </label>
+              <input
+                aria-label="Credit Amount"
+                name="creditAmount"
+                type="text"
+                placeholder="0"
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e) => {
+                  const weiValue = BigInt(e.target.value);
+                  const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                  setCreditAmount(etherValue.toString()); // Store the value in ether
+                }}
+              ></input>
               {/* NEW AREA */}
-              <hr />
-              <button className="btn" onClick={borrowFromLoan}>
-                Borrow From Loan
+              <button className="btn" onClick={acceptLoanOffer}>
+                Accept Loan Offer
               </button>
-              <br />
-              <label htmlFor="loanID1">Loan ID</label>
+              <label htmlFor="loanID">Loan ID </label>
               <input
                 aria-label="Loan ID"
-                name="loanID1"
+                name="loanID"
                 type="text"
                 placeholder="0"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setLoanId(BigInt(e.target.value))}
               ></input>
-            </li>
-            <li>
               {/* NEW AREA */}
-              <hr />
+              <button className="btn" onClick={withdraw}>
+                Withdraw
+              </button>
+              <label htmlFor="withdrawAmt">Withdraw Amount </label>
+              <input
+                aria-label="Withdraw Amount"
+                name="withdrawAmt"
+                type="text"
+                placeholder="0"
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e) => {
+                  const weiValue = BigInt(e.target.value);
+                  const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                  setWithdrawAmount(etherValue.toString()); // Store the value in ether
+                }}
+              ></input>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isPagelenders && (
+        <div className="p-5">
+          <div className="flex flex-row w-full">
+            <div className="grid w-fit card bg-base-300 rounded-box place-items-center">
+              <div className="stats stats-vertical shadow h-full">
+                {isLoading ? (
+                  <p>Loading Credit Score...</p>
+                ) : isError ? (
+                  <p>Error fetching Credit Score.</p>
+                ) : (
+                  <h3
+                    className={`btn ${
+                      creditScore < 400
+                        ? "btn-error"
+                        : creditScore < 600
+                        ? "btn-warning"
+                        : "btn-success"
+                    }`}
+                  >
+                    Credit Score: {creditScore?.toString()}
+                  </h3>
+                )}
+
+                {isLoading ? (
+                  <p>Loading Total Debt...</p>
+                ) : isError ? (
+                  <p>Error fetching Total Debt.</p>
+                ) : (
+                  <div className="stat mx-auto">
+                    <div className="stat-tile">Total Debt</div>
+                    <div className="stat-value">
+                      {borrowInfo[0]?.toString()}
+                    </div>
+                    <div className="stat-desc">
+                      The total Debt <br />
+                      the user has
+                      <br /> taken out.
+                    </div>
+                  </div>
+                )}
+
+                {isLoading ? (
+                  <p>Loading Total Amount Paid...</p>
+                ) : isError ? (
+                  <p>Error fetching Total Amount Paid.</p>
+                ) : (
+                  <div className="stat mx-auto">
+                    <div className="stat-tile">Total Amount Paid</div>
+                    <div className="stat-value">
+                      {borrowInfo[1]?.toString()}
+                    </div>
+                    <div className="stat-desc">
+                      The total amount
+                      <br /> of value paid
+                      <br /> against the debt.
+                    </div>
+                  </div>
+                )}
+
+                {isLoading ? (
+                  <p>Loading Number of Loans...</p>
+                ) : isError ? (
+                  <p>Error fetching Number of Loans.</p>
+                ) : (
+                  <div className="stat mx-auto">
+                    <div className="stat-tile">Number of Loans</div>
+                    <div className="stat-value">
+                      {borrowInfo[2]?.toString()}
+                    </div>
+                    <div className="stat-desc">
+                      How many loans
+                      <br /> the user has made.
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="divider lg:divider-horizontal"></div>
+            <div className="grid w-fit card bg-base-300 rounded-box place-items-center pb-4 p-2">
+              <ul>
+                <li>
+                  <button className="btn" onClick={createLoanOffer}>
+                    Create Loan Offer
+                  </button>
+                </li>
+                <li>
+                  {/* NEW AREA */}
+                  <label htmlFor="amount">Desired Amount (ETH)</label>
+                  <input
+                    aria-label="Desired Amount"
+                    name="amount"
+                    type="text"
+                    placeholder="0"
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={(e) => {
+                      const weiValue = BigInt(e.target.value);
+                      const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                      setBorrowAmount(etherValue.toString()); // Store the value in ether
+                    }}
+                  ></input>
+                </li>
+                <li>
+                  {/* NEW AREA */}
+                  <label htmlFor="payback">Payback Amount </label>
+                  <input
+                    aria-label="Payback Amount"
+                    name="payback"
+                    type="text"
+                    placeholder="0"
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={(e) => {
+                      const weiValue = BigInt(e.target.value);
+                      const etherValue = weiValue / BigInt(10 ** 18); // Convert from wei to ether
+                      setPaybackAmount(etherValue.toString()); // Store the value in ether
+                    }}
+                  ></input>
+                </li>
+                <li>
+                  {/* NEW AREA */}
+                  <label htmlFor="complete">Date of Completion</label>
+                  <input
+                    aria-label="Date of Completion"
+                    name="complete"
+                    type="date"
+                    placeholder="Date"
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={(e) => {
+                      const selectedDate = new Date(e.target.value);
+                      const unixTimestamp = Math.floor(
+                        selectedDate.getTime() / 1000
+                      );
+                      console.log(unixTimestamp); // Logs the Unix timestamp
+                      setDatePay(unixTimestamp); // Update state with Unix timestamp
+                    }}
+                  />
+
+                  {/* NEW AREA */}
+                  <hr />
+                  <button className="btn" onClick={borrowFromLoan}>
+                    Borrow From Loan
+                  </button>
+                  <br />
+                  <label htmlFor="loanID1">Loan ID </label>
+                  <input
+                    aria-label="Loan ID"
+                    name="loanID1"
+                    type="text"
+                    placeholder="0"
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={(e) => setLoanId(BigInt(e.target.value))}
+                  ></input>
+                </li>
+                <li>
+                  {/* NEW AREA */}
+                  <button className="btn" onClick={approveGHOFromUser}>
+                    Approve GHO
+                  </button>
+                </li>
+                <li></li>
+                <li>
+                  {/* NEW AREA */}
+                  {/*<hr />
               <button className="btn" onClick={withdraw}>
                 Withdraw
               </button>
@@ -417,31 +562,32 @@ const Dashboard: React.FC = () => {
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => setWithdrawAmount(BigInt(e.target.value))}
               ></input>
-              <br />
-            </li>
-            <li>
-              <button className="btn" onClick={payOffLoan}>
-                Pay Off Loan
-              </button>
-              <br />
-              <label htmlFor="loanID2">Loan ID</label>
-              <input
-                aria-label="Loan ID"
-                name="loanID2"
-                type="text"
-                placeholder="0"
-                className="input input-bordered w-full max-w-xs"
-                onChange={(e) => setLoanId(BigInt(e.target.value))}
-              ></input>
-              <br />
-            </li>
-          </ul>
+              <br />*/}
+                </li>
+                <li>
+                  <button className="btn" onClick={payOffLoan}>
+                    Pay Off Loan
+                  </button>
+                  <br />
+                  <label htmlFor="loanID2">Loan ID </label>
+                  <input
+                    aria-label="Loan ID"
+                    name="loanID2"
+                    type="text"
+                    placeholder="0"
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={(e) => setLoanId(BigInt(e.target.value))}
+                  ></input>
+                  <br />
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       )}
-
-      <div>
-        <h1>Loan Details</h1>
-        <table>
+      <div className="divider lg:divider-vertical"></div>
+      <div className="flex justify-center items-center ">
+        <table className="table table-zebra-zebra overflow-x-auto">
           <thead>
             <tr>
               <th>Loan ID</th>
@@ -453,7 +599,7 @@ const Dashboard: React.FC = () => {
               <th>Taken</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="">
             {allLoans.map((loan, index) => (
               <tr key={index}>
                 <td>{Number(loan[0])}</td>

@@ -15,7 +15,7 @@ const verifyUserOnContract = async (userAddress: string) => {
     );
 
     const data = await publicClient.readContract({
-      address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+      address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
       abi: creditManager,
       functionName: "verifiedUser",
       args: [userAddress],
@@ -30,7 +30,7 @@ const verifyUserOnContract = async (userAddress: string) => {
         if (entry) {
           // Prepare the contract interaction
           const { request } = await publicClient.simulateContract({
-            address: "0xd47264b894F0c04edd4D475f2a4B35F6F838d11C",
+            address: "0x5eab93d636ef455eB3C9Db590F6dF486672b3242",
             abi: creditManager,
             functionName: "verifyUser",
             args: [hashMessage(entry.documentNumber), userAddress],
