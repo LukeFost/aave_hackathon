@@ -128,76 +128,92 @@ function App() {
 
   return (
     <>
-      <div>
-        <h2>Account</h2>
-
-        <div>
-          status: {account.status}
-          <br />
-          addresses: {JSON.stringify(account.addresses)}
-          <br />
-          chainId: {account.chainId}
+      <div className="navbar bg-base-100 shadow-lg p-4">
+        <div className="flex-1">
+          <div className="card bg-base-200 p-2 mt-2">
+            <div className="card-body">
+              <h2 className="card-title text-2xl font-semibold">Account</h2>
+              <p>Status: {account.status}</p>
+              <p>Addresses: {JSON.stringify(account.addresses)}</p>
+              <p>Chain ID: {account.chainId}</p>
+            </div>
+          </div>
         </div>
 
         {account.status === "connected" && (
-          <div>
-            <button type="button" onClick={() => disconnect()}>
-              Disconnect
-            </button>
-            {isVerified === null && (
+          <div className="card bg-base-200 p-2 ml-4">
+            <div className="card-body">
               <button
                 type="button"
-                onClick={handleSignMessage}
-                disabled={signing}
+                onClick={() => disconnect()}
+                className="btn btn-secondary w-full mb-2"
               >
-                {signing ? "Signing..." : "Sign Message"}
+                Disconnect
               </button>
-            )}
 
-            {isVerified === null && (
-              <>
-                <p>
-                  {docuPassLink
-                    ? "Click the link to redirect to a website to verify your ID and personhood."
-                    : ""}
-                </p>
-                {docuPassLink && (
-                  <a
-                    href={docuPassLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+              {isVerified === null && (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleSignMessage}
+                    disabled={signing}
+                    className="btn btn-primary w-full mb-2"
                   >
-                    Verify Identity
-                  </a>
-                )}
-              </>
-            )}
+                    {signing ? "Signing..." : "Sign Message"}
+                  </button>
 
-            {isVerified === true && <p>Verified</p>}
-            {isVerified === false && (
-              <p>
-                {verificationReason ||
-                  "Verification failed. Please sign again."}
-              </p>
-            )}
+                  <p>
+                    {docuPassLink
+                      ? "Click the link to redirect to a website to verify your ID and personhood."
+                      : ""}
+                  </p>
+                  {docuPassLink && (
+                    <a
+                      href={docuPassLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link link-accent"
+                    >
+                      Verify Identity
+                    </a>
+                  )}
+                </>
+              )}
+
+              {isVerified === true && (
+                <p className="text-green-500">Verified</p>
+              )}
+              {isVerified === false && (
+                <p className="text-red-500">
+                  {verificationReason ||
+                    "Verification failed. Please sign again."}
+                </p>
+              )}
+            </div>
           </div>
         )}
       </div>
-
-      <div>
-        <h2>Connect</h2>
-        {connectors.map((connector) => (
-          <button
-            key={connector.uid}
-            onClick={() => connect({ connector })}
-            type="button"
-          >
-            {connector.name}
-          </button>
-        ))}
-        <div>{status}</div>
-        <div>{error?.message}</div>
-      </div>
+      {account.status === "disconnected" && (
+        <>
+          <div className="mt-4">
+            <h2 className="text-xl font-bold">Connect</h2>
+            <div className="flex flex-col gap-2 mt-2">
+              {connectors.map((connector) => (
+                <button
+                  key={connector.uid}
+                  onClick={() => connect({ connector })}
+                  type="button"
+                  className="btn"
+                >
+                  {connector.name}
+                </button>
+              ))}
+              <div>{status}</div>
+              <div className="text-red-500">{error?.message}</div>
+            </div>
+          </div>
+        </>
+      )}
 
       {isVerified === true && <Dashboard />}
     </>
