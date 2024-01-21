@@ -6,6 +6,7 @@ import { erc20ABI } from "../abis/erc20ABI";
 import { creditManager } from "@/abis/creditManager";
 import { poolAave } from "@/abis/poolAave";
 import { contractDebtToken } from "@/abis/contractDebtToken";
+import { formatEther, parseEther } from "viem";
 
 interface Loan {
   loanID: number;
@@ -73,6 +74,7 @@ const Dashboard: React.FC = () => {
     },
     [currentId]
   );
+  console.log(withdrawAmount);
 
   // Effect to iteratively fetch loans
   useEffect(() => {
@@ -272,7 +274,7 @@ const Dashboard: React.FC = () => {
                   <div className="stat mx-auto">
                     <div className="stat-tile">Total Balance</div>
                     <div className="stat-value">
-                      {lenderInfo[1]?.toString()}
+                      {formatEther(lenderInfo[1])}
                     </div>
                     <div className="stat-desc">
                       The total balance <br />
@@ -289,7 +291,7 @@ const Dashboard: React.FC = () => {
                   <div className="stat mx-auto">
                     <div className="stat-tile">Total Amount Borrowed</div>
                     <div className="stat-value">
-                      {lenderInfo[2]?.toString()}
+                      {formatEther(lenderInfo[2])}
                     </div>
                     <div className="stat-desc">
                       The total amount <br />
@@ -330,9 +332,7 @@ const Dashboard: React.FC = () => {
                 placeholder="0"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => {
-                  const weiValue = BigInt(e.target.value);
-                  const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
-                  setCollatAmount(etherValue.toString()); // Store the value in ether
+                  setCollatAmount(parseEther(e.target.value));
                 }}
               ></input>
               {/* NEW AREA */}
@@ -347,9 +347,7 @@ const Dashboard: React.FC = () => {
                 placeholder="0"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => {
-                  const weiValue = BigInt(e.target.value);
-                  const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
-                  setCreditAmount(etherValue.toString()); // Store the value in ether
+                  setCreditAmount(parseEther(e.target.value));
                 }}
               ></input>
               {/* NEW AREA */}
@@ -377,9 +375,7 @@ const Dashboard: React.FC = () => {
                 placeholder="0"
                 className="input input-bordered w-full max-w-xs"
                 onChange={(e) => {
-                  const weiValue = BigInt(e.target.value);
-                  const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
-                  setWithdrawAmount(etherValue.toString()); // Store the value in ether
+                  setWithdrawAmount(parseEther(e.target.value));
                 }}
               ></input>
             </div>
@@ -418,7 +414,7 @@ const Dashboard: React.FC = () => {
                   <div className="stat mx-auto">
                     <div className="stat-tile">Total Debt</div>
                     <div className="stat-value">
-                      {borrowInfo[0]?.toString()}
+                      {formatEther(borrowInfo[0])}
                     </div>
                     <div className="stat-desc">
                       The total Debt <br />
@@ -436,7 +432,7 @@ const Dashboard: React.FC = () => {
                   <div className="stat mx-auto">
                     <div className="stat-tile">Total Amount Paid</div>
                     <div className="stat-value">
-                      {borrowInfo[1]?.toString()}
+                      {formatEther(borrowInfo[1])}
                     </div>
                     <div className="stat-desc">
                       The total amount
@@ -482,9 +478,7 @@ const Dashboard: React.FC = () => {
                     placeholder="0"
                     className="input input-bordered w-full max-w-xs"
                     onChange={(e) => {
-                      const weiValue = BigInt(e.target.value);
-                      const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
-                      setBorrowAmount(etherValue.toString()); // Store the value in ether
+                      setBorrowAmount(parseEther(e.target.value));
                     }}
                   ></input>
                 </li>
@@ -498,9 +492,7 @@ const Dashboard: React.FC = () => {
                     placeholder="0"
                     className="input input-bordered w-full max-w-xs"
                     onChange={(e) => {
-                      const weiValue = BigInt(e.target.value);
-                      const etherValue = weiValue * BigInt(10 ** 18); // Convert from wei to ether
-                      setPaybackAmount(etherValue.toString()); // Store the value in ether
+                      setPaybackAmount(parseEther(e.target.value));
                     }}
                   ></input>
                 </li>
@@ -604,8 +596,8 @@ const Dashboard: React.FC = () => {
               <tr key={index}>
                 <td>{Number(loan[0])}</td>
                 <td>{loan[1]}</td>
-                <td>{Number(loan[2])}</td>
-                <td>{Number(loan[3])}</td>
+                <td>{Number(formatEther(loan[2]))}</td>
+                <td>{Number(formatEther(loan[3]))}</td>
                 <td>{new Date(Number(loan[4]) * 1000).toLocaleDateString()}</td>
                 <td>{new Date(Number(loan[5]) * 1000).toLocaleDateString()}</td>
                 <td>{loan[6] ? "Yes" : "No"}</td>
