@@ -199,7 +199,7 @@ function App() {
         <div>{error?.message}</div>
       </div>
 
-      {signature && <Dashboard />}
+      {isVerified === true && <Dashboard />}
     </>
   );
 }

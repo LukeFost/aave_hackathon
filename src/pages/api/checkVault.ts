@@ -2,6 +2,7 @@
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
+import verifyUserOnContract from "./verifyUserContract";
 
 const checkVault = async (req: NextApiRequest, res: NextApiResponse) => {
   const apiKey = process.env.ENV_DOCU_API_KEY; // Ensure you have your API key in environment variables
@@ -27,6 +28,7 @@ const checkVault = async (req: NextApiRequest, res: NextApiResponse) => {
         );
         if (entry) {
           if (entry.docupass_success === "1") {
+            verifyUserOnContract(address);
             return res.status(200).json({ status: "true" });
           } else if (entry.docupass_success === "0") {
             return res.status(200).json({
