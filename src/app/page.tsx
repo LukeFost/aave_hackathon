@@ -16,9 +16,27 @@ function App() {
   const [signing, setSigning] = useState(false);
   const [signature, setSignature] = useState("");
   const [signError, setSignError] = useState("");
-  const [validity, setValidity] = useState("");
+  const [docuPassLink, setDocuPassLink] = useState<string | null>(null);
 
-  const setMessage = "What up!";
+  const setMessage = "hello";
+
+  // Function to load the DocuPass link from local storage
+  const loadDocuPassLinkFromLocalStorage = (address: string) => {
+    const savedData = localStorage.getItem("docuPassData");
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      if (parsedData.address === address) {
+        return parsedData.docuPassLink;
+      }
+    }
+    return null; // No link or address does not match
+  };
+
+  // Function to save the DocuPass link to local storage
+  const saveDocuPassLinkToLocalStorage = (address: string, link: string) => {
+    const dataToSave = JSON.stringify({ address, docuPassLink: link });
+    localStorage.setItem("docuPassData", dataToSave);
+  };
 
   const handleSignMessage = async () => {
     if (!account) return;
@@ -29,13 +47,13 @@ function App() {
 
     try {
       const result = await signMessage(config, {
+        account: account.address,
         message: setMessage,
         connector: account.connector,
       });
       setSignature(result);
-      // run server action here
-      console.log(account.address);
-      handleVerifySignature();
+      console.log(account.address, setMessage, result);
+      handleVerifySignature(account.address, setMessage, result);
     } catch (error) {
       setSignError(error instanceof Error ? error.message : String(error));
     } finally {
@@ -43,27 +61,36 @@ function App() {
     }
   };
 
-  const handleVerifySignature = async () => {
+  const handleVerifySignature = async (
+    address: string,
+    message: string,
+    signature: string
+  ) => {
+    // Load any existing DocuPass link from local storage
+    const existingLink = loadDocuPassLinkFromLocalStorage(address);
+
     try {
+      // Include the existingLink boolean in the POST data
       const response = await axios.post("/api/verifySignature", {
         signature,
-        address: account?.address,
-        message: setMessage,
+        address: address,
+        message: message,
+        existingLink: !!existingLink, // Convert to boolean: true if existingLink is not null
       });
-      const { isValid } = response.data;
-      setValidity(isValid ? "Signature is valid." : "Signature is invalid.");
+
+      // If a new link is returned, it means there was no link in the vault and a new one was needed
+      const { docuPassLink } = response.data;
+      if (docuPassLink && !existingLink) {
+        saveDocuPassLinkToLocalStorage(address, docuPassLink);
+      }
+
+      // Use the existing link or the new one from the API response
+      setDocuPassLink(existingLink || docuPassLink);
     } catch (error) {
-      setValidity("Error occurred during verification.");
+      console.error("Error occurred during verification:", error);
+      setDocuPassLink(null);
     }
   };
-
-  // Company Name: Two Guys Engineering
-  // max attempts is 3
-  // custom ID is the signature that the user provides
-  // no need for callback url since I can save to vault
-  // no need since website will ask if signature is green or red
-  // reusable? no only once per signature
-  // expiration time is none
 
   return (
     <>
@@ -96,11 +123,19 @@ function App() {
             {signature && (
               <>
                 <p>
-                  Click the link to redirect to a website to verify your ID and
-                  personhood.
+                  {docuPassLink
+                    ? "Click the link to redirect to a website to verify your ID and personhood."
+                    : "Processing your verification..."}
                 </p>
-                {validity && <p>Yo real stuff in here</p>}
-                {!validity && <p>Yo it aint cool in here</p>}
+                {docuPassLink && (
+                  <a
+                    href={docuPassLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Verify Identity
+                  </a>
+                )}
               </>
             )}
           </div>

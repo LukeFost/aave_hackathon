@@ -10,7 +10,7 @@ Step 1: Registration and API Integration
 
 Step 2: Identify Verification
 
-{"type":"2","companyname":"Two Guys Engineering","maxattempt":"1","reusable":"0","biometric":"2","biometric_threshold":"0.3","authenticate_minscore":"1","authenticate_module":"2","phoneverification":"false","verify_expiry":"true","dualsidecheck":"true","aml_check":"true","aml_database":"eu_fsf","aml_strict_match":"false","contract_format":"pdf","vault_save":"true","return_documentimage":"true","return_faceimage":"true","return_type":"1","crop_document":"0","nobranding":"false","apikey":ENV_API_KEY}
+{"type":"2","companyname":"Two Guys Engineering","maxattempt":"1","reusable":"0","biometric":"2","biometric_threshold":"0.3","authenticate_minscore":"1","authenticate_module":"2","phoneverification":"false","verify_expiry":"true","dualsidecheck":"true","aml_check":"true","aml_database":"eu_fsf","aml_strict_match":"false","contract_format":"pdf","vault_save":"true","return_documentimage":"true","return_faceimage":"true","return_type":"1","crop_document":"0","nobranding":"false","apikey":ENV_DOCU_API_KEY}
 
 Step 3: Ethereum Address Valdiationm
 
@@ -25,3 +25,37 @@ Step 7: Optional Feature - Buckets
 Step 8: Testing and Debugging
 
 Step 9: Deployment
+
+Using the PHP code, JSON Payload, and the verifySignature.ts code, edit verifySignature.ts so that when isValid is true the vault API is checked to see if that account address already exists, if false then a link from docupass is made and displayed to the user for them to click on and redirect to a the docupass site for them to fillout and eventually figure out if they are valid or not. 
+
+Vault API:
+https://api.idanalyzer.com/vault/list
+it is similar to the PHP code and json payload as the below, but has different inputs. These inputs are the apikey and filter, which should filer for docupass_customid that is = to the address that the POST api received for the signature verification. If no similar address is found then thats an error, otherwise it continues on. 
+
+Example PHP code from them with changes to it that I wanted to make. 
+$url = "https://api.idanalyzer.com/docupass/create";
+$apikey = ENV_DOCU_API_KEY;
+$companyname = "Two Guys Engineering";
+$type = 2;
+$vault_save = true
+$customid = address;
+
+$fields = array('callbackurl' => $callbackurl, 'customid' => $customid, 'companyname' => $companyname, 'type' =>  $type, 'apikey' => $apikey);
+$resource = curl_init();
+curl_setopt($resource, CURLOPT_URL, $url);
+curl_setopt($resource, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($resource, CURLOPT_POST, 1);
+curl_setopt($resource, CURLOPT_POSTFIELDS, $fields);
+$result = json_decode(curl_exec($resource),true);
+curl_close($resource);
+
+if(!array_key_exists('error', $result)){
+	//success
+	print_r($result);
+}else{
+	//failed
+	echo("Error #" . $result['error']['code'] . " " . $result['error']['message']);
+}
+
+Example JSON Payload:
+{"type":"2","companyname":"Two Guys Engineering","maxattempt":"1","reusable":"0","biometric":"2","biometric_threshold":"0.3","authenticate_minscore":"1","authenticate_module":"2","phoneverification":"false","verify_expiry":"true","dualsidecheck":"true","aml_check":"true","aml_database":"eu_fsf","aml_strict_match":"false","contract_format":"pdf","vault_save":"true","return_documentimage":"true","return_faceimage":"true","return_type":"1","crop_document":"0","nobranding":"false","apikey":ENV_DOCU_API_KEY}
