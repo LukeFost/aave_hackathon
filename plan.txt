@@ -1,0 +1,27 @@
+Objective: Create a web platform that enables users to verify their identify using IDAnalyzer, link their Ethereum address, and establish a credit system for loans.
+
+- used https://wagmi.sh/cli/create-wagmi to start my project up and generate a boilerplate website in nextjs
+
+- I now have access to https://portal.idanalyzer.com/index.html
+
+- docs for Idanalyzer: https://developer.idanalyzer.com/
+
+Step 1: Registration and API Integration
+
+Step 2: Identify Verification
+
+{"type":"2","companyname":"Two Guys Engineering","maxattempt":"1","reusable":"0","biometric":"2","biometric_threshold":"0.3","authenticate_minscore":"1","authenticate_module":"2","phoneverification":"false","verify_expiry":"true","dualsidecheck":"true","aml_check":"true","aml_database":"eu_fsf","aml_strict_match":"false","contract_format":"pdf","vault_save":"true","return_documentimage":"true","return_faceimage":"true","return_type":"1","crop_document":"0","nobranding":"false","apikey":ENV_API_KEY}
+
+Step 3: Ethereum Address Valdiationm
+
+Step 4: Credit system
+
+Step 5: Dashboard
+
+Step 6: Loan Approval
+
+Step 7: Optional Feature - Buckets
+
+Step 8: Testing and Debugging
+
+Step 9: Deployment
