@@ -176,6 +176,8 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  console.log(loanId, "Loan ID");
+
   const payOffLoan = async () => {
     try {
       const result = await writeContract(config, {
